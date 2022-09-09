@@ -3,10 +3,9 @@
 Using what you did in the task #0, extend your
 Python script to export data in the JSON format.
 """
-import csv
 import json
 import requests
-import sys
+from sys import argv
 
 
 if __name__ == "__main__":
