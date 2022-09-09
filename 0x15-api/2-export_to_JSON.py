@@ -10,33 +10,28 @@ import sys
 
 
 if __name__ == "__main__":
+    id = argv[1]
+    user_url = "https://jsonplaceholder.typicode.com/users/{}".format(id)
+    todos_url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(
+        id)
 
-    user_id = int(sys.argv[1])
+    with requests.session() as session:
+        tasks = session.get(todos_url).json()
+        users = session.get(user_url).json()
 
-    reque_todos = requests.get(
-        'https://jsonplaceholder.typicode.com/todos').json()
-    reque_user = requests.get(
-        'https://jsonplaceholder.typicode.com/users').json()
+        list_data = []
+        for record in tasks:
+            completed = record["completed"]
+            title = record["title"]
+            username = users["username"]
+            data = {
+                "task": title,
+                "completed": completed,
+                "username": username
+            }
+            list_data.append(data)
 
-    js_file = sys.argv[1] + '.json'
-
-    with open(js_file, mode='w') as file_json:
-
-        filejson = {}
-
-        for i in reque_user:
-            if user_id == i.get('id'):
-                USERNAME = i.get('username')
-
-        listas = []
-
-        for j in reque_todos:
-            TASK_COMPLETED_STATUS = j.get('completed')
-            TASK_TITLE = j.get('title')
-            if user_id == j.get('userId'):
-                listas.append({'task': TASK_TITLE,
-                              'completed': TASK_COMPLETED_STATUS,
-                              'username': USERNAME})
-            filejson = {user_id: listas}
-
-        json.dump(filejson, file_json)
+        text_file = "{}.json".format(id)
+        with open(text_file, mode="w+", encoding="utf-8") as file:
+            data_id = {id: list_data}
+            json.dump(data_id, file)
