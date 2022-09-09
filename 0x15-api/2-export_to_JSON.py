@@ -37,6 +37,6 @@ if __name__ == "__main__":
                 listas.append({'task': TASK_TITLE,
                               'completed': TASK_COMPLETED_STATUS,
                               'username': USERNAME})
-                filejson = {user_id: listas}
+            filejson = {user_id: listas}
 
         json.dump(filejson, file_json)
